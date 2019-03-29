@@ -8,22 +8,26 @@
 <meta charset="UTF-8">
 <title>Email Management System</title>
 </head>
+<link href="https://fonts.googleapis.com/css?family=Song+Myung" rel="stylesheet">
 <style>
 *{
 	box-sizing:border-box;
 }
 
 body{
+	background-color:#F6E2B5;
 	padding: 0;
 	margin: 0;
+	font-family: 'Song Myung', serif;
 }
 
 header{
 	position:fixed;
+	height:300px;
 	width:100%;
 	top:0;
-	background-color:#F4FA58;
-	padding:30px;
+	background-image:url("https://images.unsplash.com/photo-1552987614-cea548ab520a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
+	padding:100px;
 }
 
 nav {
@@ -31,6 +35,9 @@ nav {
 	align-items: flex-end;
 	justify-content: space-between;
 	transition:align-items 0.2s;
+	background: rgb(0, 0, 0);
+  	background: rgba(255, 255, 255, 0.6);
+	margin-top:50px;
 }
 
 .logo {
@@ -46,67 +53,38 @@ nav {
 ul {
 	display: flex;
 	margin:50px 50px 0 0;
-	padding:0;
+	padding-top: 0;
+	padding-bottom: 25px;
 	list-style-type : none;
+	font-size:15pt;
+	text-shadow: 0 0 8px yellow;
 }
 
 li a {
 	display: block;
 	padding: 10px 20px;
 	text-decoration: none;
-	color:#0B0B61;
+	color:#2E64FE;
 }
 
 li a:hover {
 	background-color: #E6E6E6;
 }
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-$(function(){
-	// 이메일 목록
-	$("#home").click(function(){
-		$.ajax({
-			url:"<c:url value='/email_list'/>",
-			method:"GET",
-			success:function(result){
-				$("#body").html(result)
-			},
-			error:function(){
-				alert("NOPPPPPE")
-			}
-		})
-	})
-	
-	// 이메일 작성
-	$("#write").click(function(){
-		$.ajax({
-			url:"<c:url value='/write'/>",
-			method:"GET",
-			success:function(result){
-				$("#body").html(result)
-			},
-			error:function(){
-				alert("NOPPPPPE")
-			}
-		})
-	})
-})
-</script>
 <body>
 <header>
-<nav>
-<a href="#" id="logo"><img src="email.png" style="width:100px;"></a>
-		<ul>
-			<li><a href="javascript:void(0)" id="home"><b>Home</b></a></li>
-			<li><a href="javascript:void(0)" id="write"><b>이메일작성</b></a></li>
-			<li><a href="javascript:void(0)" id="join"><b>회원가입</b></a></li>
-			<li><a href="#" id="login"><b>로그인</b></a></li>
-		</ul>
-</nav>
+<%@ include file="/WEB-INF/views/include/home-nav.jspf" %>
 </header>
 <article id="body">
-
+<c:if test="${BODY == 'LIST'}">
+	<%@ include file="/WEB-INF/views/email_list.jsp" %>
+</c:if>
+<c:if test="${BODY == 'WRITE'}">
+	<%@ include file="/WEB-INF/views/email_write.jsp" %>
+</c:if>
+<c:if test="${BODY == 'DETAIL'}">
+<%@ include file="/WEB-INF/views/email_detail.jsp" %>
+</c:if>
 </article>
 </body>
 </html>

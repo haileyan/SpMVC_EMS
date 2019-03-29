@@ -2,8 +2,7 @@ package com.biz.email.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,69 +22,79 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class EmailService {
 
+	@Autowired
 	EmailDao eDao;
 
 	@Autowired
 	ServletContext sContext;
+
+	@Autowired
+	SendMailService sService;
 	
 	public List<EmailVO> selectAll() {
 		return eDao.selectAll();
 	}
 
-	public int insert(EmailVO emailVO, MultipartHttpServletRequest req) {
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat sd = new SimpleDateFormat("HH:mm:ss");
-		
-		Date d = new Date();
-		String today = sf.format(d);
-		String time = sd.format(d);
-		emailVO.setS_date(today);
-		emailVO.setS_time(time);
-		
-		List<MultipartFile> files = req.getFiles("s_files");
-		
+	public int insert(EmailVO emailVO) {
+		int ret = eDao.insert(emailVO);
+		sService.sendMail(emailVO);
+		return ret;
+	}
+	
+	public String upload(MultipartFile file) {
+					
 		String realPath = sContext.getRealPath("/files/");
 		File dir = new File(realPath);
+		
 		if(!dir.exists()) dir.mkdir();
 		
-		if(files.size()>0) {
-			if(files.get(0)!= null) {
-				String realName = files.get(0).getOriginalFilename();
-				String saveName = UUID.randomUUID().toString() +realName;
-				File saveFile = new File(realPath, saveName);
-				try {
-					files.get(0).transferTo(saveFile);
-					emailVO.setS_file1(saveName);
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+		if(file.isEmpty() || file == null) return null;
 		
-		if(files.size()>1) {
-			if(files.get(1)!=null) {
-				String realName = files.get(1).getOriginalFilename();
-				String saveName = UUID.randomUUID().toString()+realName;
-				File saveFile = new File(realPath, saveName);
-				try {
-					files.get(1).transferTo(saveFile);
-					emailVO.setS_file2(saveName);
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
+		String realFile = file.getOriginalFilename();
+		String saveFile = UUID.randomUUID().toString();
+		saveFile += realFile;
+		
+		File upFile = new File(realPath, saveFile);
+		try {
+			file.transferTo(upFile);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return eDao.insert(emailVO);
+		return saveFile;
 	}
+	
+	public List<String> uploads(MultipartHttpServletRequest files){
+		List<MultipartFile> fileList = files.getFiles("files");
+		List<String> fileNames = new ArrayList<String>();
+		
+		for(MultipartFile file: fileList) {
+			fileNames.add(this.upload(file));
+		}
+		return fileNames;
+	}
+
+	public int update(EmailVO emailVO) {
+		// TODO Auto-generated method stub
+		int ret = eDao.update(emailVO);
+		return ret;
+	}
+
+	public int delete(long id) {
+		// TODO Auto-generated method stub
+		int ret = eDao.delete(id);
+		return ret;
+	}
+
+	public EmailVO findById(long id) {
+		// TODO Auto-generated method stub
+		EmailVO vo = eDao.findById(id);
+		return vo;
+	}
+	
 }
 
 

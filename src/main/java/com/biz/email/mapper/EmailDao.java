@@ -11,10 +11,10 @@ import com.biz.email.model.EmailVO;
 
 public interface EmailDao {
 
-	@Select("SELECT * FROM tbl_emails")
+	@Select("SELECT * FROM tbl_emails ORDER BY s_date, s_time DESC")
 	public List<EmailVO> selectAll();
 	
-	@Select("SELECT * FROM tbl_emails WHERE id=${id}")
+	@Select("SELECT * FROM tbl_emails WHERE id=#{id}")
 	public EmailVO findById(long id);
 	
 	@Select("SELECT * FROM tbl_emails WHERE from_email=#{from_email}")
@@ -26,7 +26,7 @@ public interface EmailDao {
 	@UpdateProvider(type=EmailSQL.class, method="email_update_sql")
 	public int update(EmailVO emailVO);
 	
-	@Delete("DELETE FROM tbl_emails WHERE from_email=#{from_email}")
-	public void delete();
+	@Delete("DELETE FROM tbl_emails WHERE id=#{id}")
+	public int delete(long id);
 	
 }

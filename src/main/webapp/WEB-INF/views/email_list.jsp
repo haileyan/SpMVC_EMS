@@ -10,8 +10,8 @@
 </head>
 <style>
 body{
-margin-top:200px;
-
+	padding-top:350px;
+	margin: 0 0 auto;
 }
 
 table {
@@ -47,6 +47,16 @@ padding : 8px 8px;
 vertical-align : top; 
 }
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(function(){
+	$(".email_row").click(function(){
+		let id = $(this).attr("data-id")
+		location.replace("<c:url value ='/detail'/>" + "?id=" + id)
+	})
+	
+})
+</script>
 <body>
 <table>
 <tr>
@@ -58,12 +68,11 @@ vertical-align : top;
 </tr>
 <c:choose>
 	<c:when test="${empty EMAIL}">
-	<tr coalspan="5">내용이 없습니다</tr>
+	<tr><td colspan="5">내용이 없습니다</td></tr>
 	</c:when>
-	
 	<c:otherwise>
 		<c:forEach items="${EMAIL}" var="email" varStatus="i">
-		<tr>
+		<tr class="email_row" data-id="${email.id}">
 			<td>${email.from_email}</td>
 			<td>${email.to_email}</td>		
 			<td>${email.s_date}</td>
@@ -76,3 +85,4 @@ vertical-align : top;
 </table>
 </body>
 </html>
+

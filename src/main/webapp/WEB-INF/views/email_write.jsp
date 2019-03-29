@@ -10,7 +10,8 @@
 </head>
 <style>
 body {
-margin-top: 200px;
+	margin-top: 350px;
+
 }
 
 form{
@@ -37,53 +38,34 @@ button{
 	margin-left:600px;
 }
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-$(function(){
-	$("#btn_save").click(function(){
-		
-		$.ajax({
-			url:"<c:url value='/write'/>",
-			method:"POST",
-			data:$("#write_form1").serialize()+"@@"+$("#write_form2").serialize(),
-			success:function(result){
-				alert(result)
-			},
-			error:function(){
-				alert("잉?!!!")
-			}
-		})
-	})
-})
-</script>
 <body>
 <section>
-<form action="<c:url value='/insert'/>" method="POST" id="write_form1" enctype="multipart/form-data">
-	<label for="from_email">발신인</label>
-	<input value="${EMAIL.from_email}" type="text" name="from_email"><br/>
+	<form action="<c:url value="/write"/>" method="POST" class="write_form" enctype="multipart/form-data">
+	
+	<label for="from_email">발신인</label>	
+	<input value="${EmailVO.from_email}" type="" name="from_email"><br/>
 
-	<label for="to_email">수신인</label>
-	<input value="${EMAIL.to_email}" type="text" name="to_email"><br/>
+	<label for="to_email">수신인</label>	
+	<input value="${EmailVO.to_email}" type="text" name="to_email"><br/>
 	
-	<label for="s_date">발송일</label>
-	<input value="${EMAIL.s_date}" type="text" name="s_date"><br/>
+	<label for="s_subject">제목</label>	
+	<input value="${EmailVO.s_subject}" type="text" name="s_subject"><br/>
 	
-	<label for="s_time">발송시간</label>
-	<input value="${EMAIL.s_time}" type="text" name="s_time"><br/>
-	
-	<label for="s_subject">제목</label>
-	<input value="${EMAIL.s_subject}" type="text" name="s_subject"><br/>
-	
-	<label for="s_content">내용</label>
-	<textarea rows="10" id="s_content" name="s_content">${EMAIL.s_content}</textarea><br/>
+	<label for="s_content"></label>	
+	<textarea rows="10" id="s_content" name="s_content">${EmailVO.s_content}</textarea><br/>
 
-	<label for="s_file1">첨부파일1</label>
-	<input multiple value="${EMAIL.s_file1}" type="file" name="s_file1"><br/>
+	<label for="s_file1">첨부파일1</label>	
+	<input value="${EmailVO.s_file1}" type="file" name="file1"><br/>
+	<input type="hidden" id="s_file1" value="${EmailVO.s_file1}" >
 
+	<label for="s_file2">첨부파일2</label>	
+	<input value="${EmailVO.s_file2}" type="file" name="file2"><br/>
+	<input type="hidden" id="s_file2" value="${EmailVO.s_file2}" >
+	
 	<label></label>
-	<button type="button" id="btn_save">SAVE</button>
-	
-</form>
+	<button>저장하기</button>
+	</form>
+
 </section>
 </body>
 </html>

@@ -1,9 +1,5 @@
 package com.biz.email.model;
 
-import java.util.LinkedList;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +22,5 @@ public class EmailVO {
 	private String s_content;
 	private String s_file1;
 	private String s_file2;
-	private LinkedList<MultipartFile> s_files;
 	
 }
